@@ -1,5 +1,5 @@
 import AcmeLogo from '@/app/ui/acme-logo';
-import { ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline';
+import { ArrowRightCircleIcon, ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import styles from '@/app/ui/home.module.css';
 import { inter, lusitana, anton, kanit } from '@/app/ui/fonts';
@@ -29,6 +29,12 @@ export default function Page() {
           <p className={`text-4xl text-slate-50 md:text-5xl md:leading-normal ${anton.className}`}>
             <strong>Our Barbershop Admin Dashboard</strong>
           </p>
+          <Link href='/dashboard'>
+            <h1 className={`${kanit.className} antialised flex text-white text-[20px] hover:text-teal-500`}>
+              Go to Dashboard
+              <ArrowRightCircleIcon className='w-6 mx-2' />
+            </h1>
+          </Link>
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12 relative">
           <div className="text-container absolute top-1/4 left-0 right-0 z-10">
@@ -36,7 +42,7 @@ export default function Page() {
         </div>
       </div>
       <header className="w-full">
-        <div className="fixed inset-x-0 top-0 z-10 w-full px-4 py-1 bg-white shadow-md border-slate-500 bg-transparent transition duration-700 ease-out">
+        <div className="fixed inset-x-0 top-0 z-10 w-full px-4 py-1 shadow-md border-slate-500 bg-transparent transition duration-700 ease-out">
           <div className="flex items-center p-4">
             <div>
               <Image
