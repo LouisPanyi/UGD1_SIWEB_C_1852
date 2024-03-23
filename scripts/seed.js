@@ -4,8 +4,44 @@ const {
   customers,
   revenue,
   users,
+  reservations,
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
+
+async function seedReservations(client) {
+  try {
+    await client.sql
+    const createTable = await client.sql`
+    CREATE TABLE IF NOT EXISTS reservations (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    customer_id UUID NOT NULL,
+    amount INT NOT NULL,
+    status VARCHAR(255) NOT NULL,
+    date DATE NOT NULL
+  );
+`;
+    console.log('Created "reservations" table');
+
+    const insertedReservations = await Promise.all(
+      reservations.map(
+        (reservation) => client.sql`
+        INSERT INTO reservations (customer_id, amount, status, date)
+       VALUES (${reservation.customer_id}, ${reservation.amount}, ${reservation.status}, ${reservation.date})
+        ON CONFLICT (id) DO NOTHING;
+      `,
+      ),
+    );
+    console.log(`Seeded ${insertedReservations.length} reservations`);
+
+    return {
+      createTable,
+      reservations: insertedReservations,
+    };
+  } catch (error) {
+    console.error('Error seeding reservations', error);
+    throw error;
+  }
+}
 
 async function seedUsers(client) {
   try {
@@ -167,6 +203,7 @@ async function main() {
   await seedCustomers(client);
   await seedInvoices(client);
   await seedRevenue(client);
+  await seedReservations(client);
 
   await client.end();
 }

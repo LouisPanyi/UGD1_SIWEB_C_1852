@@ -9,7 +9,22 @@ const users = [
   },
 ];
 
+const reservations = [
+  {
+    customer_id: customers[1].id,
+    amount:  6999,
+    status: 'pending',
+    date: '2024-03-23',
+  }
+];
+
 const customers = [
+  {
+    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
+    name: '221711852',
+    email: 'Mario Louis Steven Gunardi Panyi',
+    image_url: '/customers/michael-novotny.png',
+  },
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
     name: 'Delba de Oliveira',
@@ -185,4 +200,5 @@ module.exports = {
   customers,
   invoices,
   revenue,
+  reservations,
 };
