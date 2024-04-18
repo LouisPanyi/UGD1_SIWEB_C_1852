@@ -307,3 +307,29 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+
+export async function fetchReservationById(id: string) {
+
+  try {
+    const data = await sql<ReservationForm>`
+      SELECT
+        reservations.id,
+        reservations.customer_id,
+        reservations.amount,
+        reservations.status
+      FROM reservations
+      WHERE reservations.id = ${id};
+    `;
+
+    const reservation = data.rows.map((reservation) => ({
+      ...reservation,
+      // Convert amount from cents to dollars
+      amount: reservation.amount / 100,
+    }));
+
+    return reservation[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch reservation.');
+  }
+}
