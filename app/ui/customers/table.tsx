@@ -7,10 +7,7 @@ import {
 } from '@/app/lib/definitions';
 
 export default async function CustomersTable({
-  customers,
-}: {
-  customers: FormattedCustomersTable[];
-}) {
+ app/ui/reservations/table.tsx
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>

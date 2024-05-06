@@ -164,8 +164,8 @@ export async function fetchCardData() {
     throw new Error('Failed to fetch card data.');
   }
 }
-
 const ITEMS_PER_PAGE = 6;
+
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
@@ -331,5 +331,52 @@ export async function fetchReservationById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch reservation.');
+  }
+}
+
+// export async function fetchReservationById(id: string) {
+
+//   try {
+//     const data = await sql<ReservationForm>`
+//       SELECT
+//         reservations.id,
+//         reservations.customer_id,
+//         reservations.amount,
+//         reservations.status
+//       FROM reservations
+//       WHERE reservations.id = ${id};
+//     `;
+
+//     const reservation = data.rows.map((reservation) => ({
+//       ...reservation,
+//       // Convert amount from cents to dollars
+//       amount: reservation.amount / 100,
+//     }));
+
+//     return reservation[0];
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch reservation.');
+//   }
+// }
+
+export async function fetchCustomersPage(query: string) {
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM customers
+    JOIN customers ON customers.customer_id = customers.id
+    WHERE
+      customers.name ILIKE ${`%${query}%`} OR
+      customers.email ILIKE ${`%${query}%`} OR
+      customers.amount::text ILIKE ${`%${query}%`} OR
+      reservations.date::text ILIKE ${`%${query}%`} OR
+      reservations.status ILIKE ${`%${query}%`}
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of reservations.');
   }
 }

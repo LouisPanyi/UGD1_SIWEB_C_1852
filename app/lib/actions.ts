@@ -1,6 +1,6 @@
 'use server';
 
-import { z } from 'zod'; 
+import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -12,11 +12,13 @@ const FormSchema = z.object({
   status: z.enum(['pending', 'paid']),
   date: z.string(),
 });
- 
+
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 const CreateReservation = FormSchema.omit({ id: true, date: true });
 const UpdateReservation = FormSchema.omit({ id: true, date: true });
+const CreateCustomer = FormSchema.omit({ id: true, date: true });
+const UpdateCustomer = FormSchema.omit({ id: true, date: true });
 
 export async function createInvoice(formData: FormData) {
   const { customerId, amount, status } = CreateInvoice.parse({
@@ -42,15 +44,15 @@ export async function updateInvoice(id: string, formData: FormData) {
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
- 
+
   const amountInCents = amount * 100;
- 
+
   await sql`
     UPDATE invoices
     SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
     WHERE id = ${id}
   `;
- 
+
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
 }
@@ -61,43 +63,85 @@ export async function deleteInvoice(id: string) {
 }
 
 export async function createReservation(formData: FormData) {
-    const { customerId, amount, status } = CreateReservation.parse({
-      customerId: formData.get('customerId'),
-      amount: formData.get('amount'),
-      status: formData.get('status'),
-    });
-    const amountInCents = amount * 100;
-    const date = new Date().toISOString().split('T')[0];
-  
-    await sql`
+  const { customerId, amount, status } = CreateReservation.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+  const amountInCents = amount * 100;
+  const date = new Date().toISOString().split('T')[0];
+
+  await sql`
       INSERT INTO reservations (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
-  
-    revalidatePath('/dashboard/reservations');
-    redirect('/dashboard/reservations');
-  }
-  
-  export async function updateReservation(id: string, formData: FormData) {
-    const { customerId, amount, status } = UpdateReservation.parse({
-      customerId: formData.get('customerId'),
-      amount: formData.get('amount'),
-      status: formData.get('status'),
-    });
-   
-    const amountInCents = amount * 100;
-   
-    await sql`
+
+  revalidatePath('/dashboard/reservations');
+  redirect('/dashboard/reservations');
+}
+
+export async function updateReservation(id: string, formData: FormData) {
+  const { customerId, amount, status } = UpdateReservation.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+
+  const amountInCents = amount * 100;
+
+  await sql`
       UPDATE reservations
       SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
       WHERE id = ${id}
     `;
-   
-    revalidatePath('/dashboard/reservations');
-    redirect('/dashboard/reservations');
-  }
-  
-  export async function deleteReservation(id: string) {
-    await sql`DELETE FROM reservations WHERE id = ${id}`;
-    revalidatePath('/dashboard/reservations');
-  }
+
+  revalidatePath('/dashboard/reservations');
+  redirect('/dashboard/reservations');
+}
+
+export async function deleteReservation(id: string) {
+  await sql`DELETE FROM reservations WHERE id = ${id}`;
+  revalidatePath('/dashboard/reservations');
+}
+
+export async function createCustomer(formData: FormData) {
+  const { customerId, amount, status } = CreateCustomer.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+  const amountInCents = amount * 100;
+  const date = new Date().toISOString().split('T')[0];
+
+  await sql`
+      INSERT INTO customers (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+    `;
+
+  revalidatePath('/dashboard/customers');
+  redirect('/dashboard/customers');
+}
+
+export async function updateCustomer(id: string, formData: FormData) {
+  const { customerId, amount, status } = UpdateCustomer.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+
+  const amountInCents = amount * 100;
+
+  await sql`
+      UPDATE customers
+      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+      WHERE id = ${id}
+    `;
+
+  revalidatePath('/dashboard/customers');
+  redirect('/dashboard/customers');
+}
+
+export async function deleteCustomer(id: string) {
+  await sql`DELETE FROM customers WHERE id = ${id}`;
+  revalidatePath('/dashboard/customers');
+}
