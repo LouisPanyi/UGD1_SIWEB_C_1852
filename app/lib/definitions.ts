@@ -64,9 +64,9 @@ export type ReservationForm = {
 
 export type CustomerForm = {
   id: string;
-  customer_id: string;
-  amount: number;
-  status: 'pending' | 'paid';
+  name: string;
+  email: string;
+  image_url: string;
 };
 
 export type Revenue = {

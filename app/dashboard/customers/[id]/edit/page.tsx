@@ -1,26 +1,29 @@
-import Form from '@/app/ui/reservations/edit-form';
-import Breadcrumbs from '@/app/ui/reservations/breadcrumbs';
-import { fetchReservationById, fetchCustomers } from '@/app/lib/data';
+import Form from '@/app/ui/customers/edit-form';
+import Breadcrumbs from '@/app/ui/customers/breadcrumbs';
+import { fetchCustomerById, fetchCustomers } from '@/app/lib/data';
+import { Suspense } from 'react';
  
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
-    const [reservation, customers] = await Promise.all([
-        fetchReservationById(id),
-        fetchCustomers(),
-      ]);
+  const [customers] = await Promise.all([
+    fetchCustomerById(id),
+    fetchCustomers(),
+  ]);
   return (
     <main>
+      <Suspense>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Reservations', href: '/dashboard/reservations' },
+          { label: 'customers', href: '/dashboard/customers' },
           {
-            label: 'Edit Invoice',
-            href: `/dashboard/reservations/${id}/edit`,
+            label: 'Edit customer',
+            href: `/dashboard/customers/${id}/edit`,
             active: true,
           },
         ]}
       />
-      <Form reservations={reservation} customers={customers} />
+      <Form customers={customers} />
+      </Suspense>
     </main>
   );
 }
