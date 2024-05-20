@@ -1,11 +1,8 @@
-import AcmeLogo from '@/app/ui/acme-logo';
-import { ArrowRightCircleIcon, ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline';
+import { ArrowRightCircleIcon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import styles from '@/app/ui/home.module.css';
-import { inter, lusitana, anton, kanit } from '@/app/ui/fonts';
+import { anton, kanit } from '@/app/ui/fonts';
 import Image from 'next/image';
-import { UsersIcon } from '@heroicons/react/24/outline';
-
+//p commit
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6 relative">
