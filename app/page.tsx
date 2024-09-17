@@ -57,9 +57,11 @@ export default function Page() {
             </a>
             <div className="flex items-center space-x-4 text-lg font-semibold tracking-tight border-slate-500 ml-auto">
               <UserIcon className="text-white w-5 h-5 md:hidden" />
-              <button className="px-6 py-2 text-white transition duration-500 ease-out border border-white rounded-lg hover:bg-transparent hover:ease-in hover:underline hidden md:block">
-                Login
-              </button>
+              <Link href='/dashboard'>
+                <button className="px-6 py-2 text-white transition duration-500 ease-out border border-white rounded-lg hover:bg-transparent hover:ease-in hover:underline hidden md:block">
+                  Login
+                </button>
+              </Link>
             </div>
           </div>
         </div>
